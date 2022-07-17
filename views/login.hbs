@@ -1,0 +1,51 @@
+<section class="login-form">
+  <form class="form">
+    <p>Inicia sesión con</p>
+    <input type="email" name="email" id="email" placeholder="Email Address">
+    <span id="userError"></span>
+    <input type="password" name="password" id="password" placeholder="Password">
+    <section class="utilities-widget">
+    <div>
+    <input type="checkbox"> <p>Remember me (fix)</p>
+    </div>
+    <a href="/account/forgot">Forgot password? (fix)</a>
+    </section>
+    <button id="loginBtn">Login</button>
+    <section class="register-widget">
+    <p> Don't have an account? <a href="/account/register">Register</a></p>
+    </section>
+  </form>
+</section>
+
+
+<script>
+  window.onload = () => {
+
+
+    const loggedIn = async (e) => {
+      e.preventDefault();
+      
+    };
+
+  const loginSubmit = async (e) => {
+    e.preventDefault();
+    const user = window.localStorage.getItem('user');
+    const config = { header: {'Content-Type': 'application/json'},};
+      let email = document.getElementById('email').value;
+      let password = document.getElementById('password').value;
+    try {
+      //await axios.post('https://project-chouse.herokuapp.com/api/signup', {email}, config);
+      const data = await axios.post('http://localhost:8080/api/signin', {email, password}, config);
+      window.localStorage.setItem('user', JSON.stringify(data));
+      window.location = '/home';
+      console.log(user)
+    }
+    catch(err){
+      let userError = document.getElementById('userError');
+      let error = err.response.data.Error;
+      userError.textContent = JSON.stringify(error);
+  };
+  }
+  document.getElementById('loginBtn').addEventListener('click', loginSubmit);
+  }
+</script>
